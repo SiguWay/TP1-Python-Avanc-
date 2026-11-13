@@ -15,9 +15,9 @@ def lire_lignes(chemin):
 def decouper(ligne):
     parties = ligne.split(",")
 
-    type_mesure = parties[2]
+    type_mesure = parties[2].strip()
 
-    valeur_convertie = float(parties[3])
+    valeur_convertie = float(parties[3].strip())
 
     if type_mesure == "temperature" and (valeur_convertie < -50 or valeur_convertie > 60):
             raise ValueError(f"Température aberrante: {valeur_convertie}")
@@ -26,11 +26,11 @@ def decouper(ligne):
         raise ValueError(f"Humidité aberrante: {valeur_convertie}")
 
     return {
-        "horodatage" : parties[0],
-        "capteur" : parties[1],
+        "horodatage" : parties[0].strip(),
+        "capteur" : parties[1].strip(),
         "type" : type_mesure,
         "valeur" : valeur_convertie,
-        "unite" : parties[4]
+        "unite" : parties[4].strip()
     }
 
 
@@ -40,17 +40,22 @@ def charger(chemin):
     erreur = 0
     tab_ligne = lire_lignes(chemin)
     releves = []
+    ligne_erreur = 2
 
     for ligne in tab_ligne:
+        print(ligne_erreur)
         try:
             releves.append(decouper(ligne))
         except ValueError:
+            print(f"Erreur ligne {ligne_erreur} (ValueError) : Valeur abberante")
             erreur += 1
         except IndexError:
+            print(f"Erreur ligne {ligne_erreur} (IndexError) : Ligne incomplète")
             erreur += 1
-    print(erreur," erreurs ", len(releves), "releves charges")
 
+        ligne_erreur += 1
+    print(f"{len(releves)} releves charges, {erreur} lignes ignorees")
     return releves
 
 if __name__ == "__main__":
-    releves = charger("donnees/releves_septembre.csv")
+    releves = charger("station/donnees/releves_septembre.csv")
