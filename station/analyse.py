@@ -105,7 +105,7 @@ def afficher_resume(releves):
     for capteur, valeurs in stats.items():
         mini, moy, maxi = valeurs
         unite = unite_du_capteur(releves, capteur)
-        print(f"{capteur:<10} | {mini:>8.1f} | {moy:>8.1f} | {maxi:>8.1f} | {unite}")
+        print(f"{capteur:<10} {mini:>8.1f} {moy:>8.1f} {maxi:>8.1f} {unite}")
 
 if __name__ == "__main__":
     releves = charger("station/donnees/releves_septembre.csv")
